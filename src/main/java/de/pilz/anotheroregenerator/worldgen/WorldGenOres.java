@@ -30,10 +30,10 @@ public class WorldGenOres implements IWorldGenerator {
                     veinSize,
                     entry.getSourceBlock());
 
-                for (int i = 0; i < entry.blocksPerVein; ++i) {
-                    final int posX = chunkX + random.nextInt(16);
+                for (int i = 0; i < entry.intensity; ++i) {
+                    final int posX = chunkX * 16 + random.nextInt(16);
                     final int posY = entry.minY + random.nextInt(entry.maxY - entry.minY);
-                    final int posZ = chunkZ + random.nextInt(16);
+                    final int posZ = chunkZ * 16 + random.nextInt(16);
                     minable.generate(world, random, posX, posY, posZ);
                 }
             }

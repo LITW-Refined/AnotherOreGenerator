@@ -8,6 +8,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 public class OreConfigEntry {
 
+    public String name;
     public boolean enabled;
     public boolean isAdditional;
 
@@ -18,7 +19,7 @@ public class OreConfigEntry {
     public String sourceModName = "minecraft";
     public String sourceBlockName = "stone";
 
-    public int blocksPerVein;
+    public int intensity; // Vines per chunk (blocks per chunk for additional)
     public int minVeinSize;
     public int maxVeinSize;
     public int minY;

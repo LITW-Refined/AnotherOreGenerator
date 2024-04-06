@@ -36,7 +36,7 @@ public class WorldGenOresAdditional implements IWorldGenerator {
                     if (entry.enabled && entry.isAdditional && entry.allowInDimension(world.provider.dimensionId)) {
                         int y = entry.minY + random.nextInt(entry.maxY - entry.minY);
 
-                        for (int l = 0; l < entry.blocksPerVein; ++l) {
+                        for (int l = 0; l < entry.intensity; ++l) {
                             int i1 = x + random.nextInt(8) - random.nextInt(8);
                             int j1 = y + random.nextInt(4) - random.nextInt(4);
                             int k1 = z + random.nextInt(8) - random.nextInt(8);
