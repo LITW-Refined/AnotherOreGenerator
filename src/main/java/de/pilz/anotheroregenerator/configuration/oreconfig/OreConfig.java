@@ -19,7 +19,7 @@ public class OreConfig {
     }
 
     public OreConfigEntry[] getOres() {
-        return (OreConfigEntry[]) entries.toArray();
+        return entries.toArray(new OreConfigEntry[entries.size()]);
     }
 
     public static OreConfig loadConfig(String folderPath) {
@@ -28,21 +28,25 @@ public class OreConfig {
 
         File[] files = new File(folderPath).listFiles();
 
-        for (File file : files) {
-            if (file.isFile() && file.getName()
-                .toLowerCase()
-                .endsWith(".json")) {
-                try {
-                    String raw = new String(Files.readAllBytes(Paths.get(file.getPath())));
-                    OreConfigEntry[] entries = gson.fromJson(raw, OreConfigEntry[].class);
+        if (files != null) {
+            for (File file : files) {
+                if (file.isFile() && file.getName()
+                    .toLowerCase()
+                    .endsWith(".json")) {
+                    try {
+                        String raw = new String(Files.readAllBytes(Paths.get(file.getPath())));
+                        OreConfigEntry[] entries = gson.fromJson(raw, OreConfigEntry[].class);
 
-                    for (OreConfigEntry entry : entries) {
-                        config.registerOre(entry);
+                        for (OreConfigEntry entry : entries) {
+                            config.registerOre(entry);
+                        }
+                    } catch (IOException ex) {
+                        AnotherOreGenerator.LOG.error("Ore config file can not be read!", ex);
                     }
-                } catch (IOException ex) {
-                    AnotherOreGenerator.LOG.error("Ore config file can not be read!", ex);
                 }
             }
+        } else {
+            AnotherOreGenerator.LOG.error("Ore config directory does not exists: " + folderPath);
         }
 
         return config;

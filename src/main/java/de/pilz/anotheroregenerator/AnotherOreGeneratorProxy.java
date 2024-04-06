@@ -9,6 +9,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
+import de.pilz.anotheroregenerator.configuration.ConfigManager;
 import de.pilz.anotheroregenerator.configuration.oreconfig.OreConfig;
 import de.pilz.anotheroregenerator.events.OreGenEventHandler;
 import de.pilz.anotheroregenerator.worldgen.WorldGenOres;
@@ -25,6 +26,7 @@ public class AnotherOreGeneratorProxy {
     // GameRegistry." (Remove if not needed)
     public void preInit(FMLPreInitializationEvent event) {
         AnotherOreGenerator.LOG.info("I am " + AnotherOreGenerator.MODNAME + " at version " + Tags.VERSION);
+        ConfigManager.initConfig();
         oreConfig = OreConfig
             .loadConfig(new File(event.getModConfigurationDirectory(), AnotherOreGenerator.MODID).getPath());
         oreGenEventHandler = new OreGenEventHandler();
