@@ -37,8 +37,13 @@ public class OreConfig {
                         String raw = new String(Files.readAllBytes(Paths.get(file.getPath())));
                         OreConfigEntry[] entries = gson.fromJson(raw, OreConfigEntry[].class);
 
-                        for (OreConfigEntry entry : entries) {
-                            config.registerOre(entry);
+                        if (entries != null) {
+                            for (OreConfigEntry entry : entries) {
+                                config.registerOre(entry);
+                            }
+                        } else {
+                            AnotherOreGenerator.LOG
+                                .error("Ore config file can not be read! It probably has an invalid format.");
                         }
                     } catch (IOException ex) {
                         AnotherOreGenerator.LOG.error("Ore config file can not be read!", ex);
