@@ -1,4 +1,4 @@
-package de.pilz.anotheroregenerator.configuration;
+package de.pilz.anotheroregenerator.configuration.oreconfig;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,7 +19,7 @@ public class OreConfig {
     }
 
     public OreConfigEntry[] getOres() {
-        return (OreConfigEntry[])entries.toArray();
+        return (OreConfigEntry[]) entries.toArray();
     }
 
     public static OreConfig loadConfig(String folderPath) {
@@ -29,7 +29,9 @@ public class OreConfig {
         File[] files = new File(folderPath).listFiles();
 
         for (File file : files) {
-            if (file.isFile() && file.getName().toLowerCase().endsWith(".json")) {
+            if (file.isFile() && file.getName()
+                .toLowerCase()
+                .endsWith(".json")) {
                 try {
                     String raw = new String(Files.readAllBytes(Paths.get(file.getPath())));
                     OreConfigEntry[] entries = gson.fromJson(raw, OreConfigEntry[].class);
@@ -37,7 +39,7 @@ public class OreConfig {
                     for (OreConfigEntry entry : entries) {
                         config.registerOre(entry);
                     }
-                } catch(IOException ex) {
+                } catch (IOException ex) {
                     AnotherOreGenerator.LOG.error("Ore config file can not be read!", ex);
                 }
             }

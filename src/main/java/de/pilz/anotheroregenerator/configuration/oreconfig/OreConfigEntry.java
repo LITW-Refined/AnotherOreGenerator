@@ -1,11 +1,15 @@
-package de.pilz.anotheroregenerator.configuration;
+package de.pilz.anotheroregenerator.configuration.oreconfig;
+
+import net.minecraft.block.Block;
 
 import org.apache.commons.lang3.ArrayUtils;
 
 import cpw.mods.fml.common.registry.GameRegistry;
-import net.minecraft.block.Block;
 
 public class OreConfigEntry {
+
+    public boolean enabled;
+    public boolean isAdditional;
 
     public String oreModName;
     public String oreBlockName;
@@ -20,12 +24,8 @@ public class OreConfigEntry {
     public int minY;
     public int maxY;
 
-    public boolean isAdditional = false;
-    public int maxAdditionalY = 15;
-    public int minAdditionalY = 25;
-
     public int[] dimensionIdsBlacklist = new int[0];
-    public boolean dimensionIdsBlacklistAsWhitelist = false;
+    public boolean dimensionIdsBlacklistAsWhitelist;
 
     public boolean allowInDimension(int dimensionId) {
         return ArrayUtils.contains(dimensionIdsBlacklist, dimensionId) == dimensionIdsBlacklistAsWhitelist;
