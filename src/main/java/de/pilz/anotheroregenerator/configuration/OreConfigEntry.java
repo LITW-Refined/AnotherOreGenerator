@@ -20,7 +20,7 @@ public class OreConfigEntry {
     public int minY;
     public int maxY;
 
-    public boolean generateAdditional = false;
+    public boolean isAdditional = false;
     public int maxAdditionalY = 15;
     public int minAdditionalY = 25;
 

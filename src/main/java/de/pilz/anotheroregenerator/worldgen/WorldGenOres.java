@@ -21,7 +21,7 @@ public class WorldGenOres implements IWorldGenerator {
     public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator,
             IChunkProvider chunkProvider) {
         for (OreConfigEntry entry : oreConfig.getOres()) {
-            if (entry.allowInDimension(world.provider.dimensionId)) {
+            if (entry.isAdditional && entry.allowInDimension(world.provider.dimensionId)) {
                 final int veinSize = entry.minVeinSize + random.nextInt(entry.maxVeinSize - entry.minVeinSize);
                 final WorldGenMinable minable = new WorldGenMinable(entry.getOreBlock(), entry.oreBlockMeta, veinSize, entry.getSourceBlock());
 

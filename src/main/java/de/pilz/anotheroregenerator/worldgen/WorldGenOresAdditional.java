@@ -2,8 +2,6 @@ package de.pilz.anotheroregenerator.worldgen;
 
 import java.util.Random;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import cpw.mods.fml.common.IWorldGenerator;
 import de.pilz.anotheroregenerator.configuration.OreConfig;
 import de.pilz.anotheroregenerator.configuration.OreConfigEntry;
@@ -11,7 +9,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class WorldGenOresAdditional implements IWorldGenerator {
@@ -30,7 +27,7 @@ public class WorldGenOresAdditional implements IWorldGenerator {
 
             if ((world.getHeightValue(x, z) > 0) && random.nextInt(3) == 1) {
                 for (OreConfigEntry entry : oreConfig.getOres()) {
-                    if (entry.generateAdditional && entry.allowInDimension(world.provider.dimensionId)) {
+                    if (entry.isAdditional && entry.allowInDimension(world.provider.dimensionId)) {
                         int y = entry.minAdditionalY + random.nextInt(entry.maxAdditionalY - entry.minAdditionalY);
 
                         for (int l = 0; l < entry.blocksPerVein; ++l)
