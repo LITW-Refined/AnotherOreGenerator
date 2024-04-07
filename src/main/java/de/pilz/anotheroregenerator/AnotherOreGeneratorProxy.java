@@ -17,6 +17,7 @@ import de.pilz.anotheroregenerator.worldgen.WorldGenOresAdditional;
 
 public class AnotherOreGeneratorProxy {
 
+    private String oreConfigFolder;
     private OreConfig oreConfig;
     private WorldGenOres worldGenOres;
     private WorldGenOresAdditional worldGenOredAdditional;
@@ -26,23 +27,32 @@ public class AnotherOreGeneratorProxy {
     // GameRegistry." (Remove if not needed)
     public void preInit(FMLPreInitializationEvent event) {
         AnotherOreGenerator.LOG.info("I am " + AnotherOreGenerator.MODNAME + " at version " + Tags.VERSION);
+
+        // Load mod config
         ConfigManager.initConfig();
-        oreConfig = OreConfig
-            .loadConfig(new File(event.getModConfigurationDirectory(), AnotherOreGenerator.MODID).getPath());
-        oreGenEventHandler = new OreGenEventHandler();
-        MinecraftForge.ORE_GEN_BUS.register(oreGenEventHandler);
+
+        // Load ore configs
+        oreConfigFolder = new File(event.getModConfigurationDirectory(), AnotherOreGenerator.MODID).getPath();
     }
 
     // load "Do your mod setup. Build whatever data structures you care about. Register recipes." (Remove if not needed)
-    public void init(FMLInitializationEvent event) {}
+    public void init(FMLInitializationEvent event) {
+        // Load ore configs
+        oreConfig = OreConfig.loadConfig(oreConfigFolder);
 
-    // postInit "Handle interaction with other mods, complete your setup based on this." (Remove if not needed)
-    public void postInit(FMLPostInitializationEvent event) {
+        // Ore generation event
+        oreGenEventHandler = new OreGenEventHandler();
+        MinecraftForge.ORE_GEN_BUS.register(oreGenEventHandler);
+
+        // World generation
         worldGenOres = new WorldGenOres(oreConfig);
         worldGenOredAdditional = new WorldGenOresAdditional(oreConfig);
         GameRegistry.registerWorldGenerator(worldGenOres, 0);
         GameRegistry.registerWorldGenerator(worldGenOredAdditional, 0);
     }
+
+    // postInit "Handle interaction with other mods, complete your setup based on this." (Remove if not needed)
+    public void postInit(FMLPostInitializationEvent event) {}
 
     // register server commands in this event handler (Remove if not needed)
     public void serverStarting(FMLServerStartingEvent event) {}
