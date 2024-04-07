@@ -14,7 +14,8 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
     modid = AnotherOreGenerator.MODID,
     version = Tags.VERSION,
     name = AnotherOreGenerator.MODNAME,
-    acceptedMinecraftVersions = "[1.7.10]")
+    acceptedMinecraftVersions = "[1.7.10]",
+    acceptableRemoteVersions = "*")
 public class AnotherOreGenerator {
 
     public static final String MODID = "anotheroregenerator";
