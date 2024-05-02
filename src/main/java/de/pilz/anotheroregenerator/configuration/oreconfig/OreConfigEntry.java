@@ -16,6 +16,10 @@ public class OreConfigEntry {
     public String oreBlockName;
     public int oreBlockMeta = 0;
 
+    public String deepslateOreModName;
+    public String deepslateOreBlockName;
+    public int deepslateOreBlockMeta = 0;
+
     public String sourceModName = "minecraft";
     public String sourceBlockName = "stone";
 
@@ -38,5 +42,9 @@ public class OreConfigEntry {
 
     public Block getOreBlock() {
         return GameRegistry.findBlock(oreModName, oreBlockName);
+    }
+
+    public Block getDeepslateOreBlock() {
+        return GameRegistry.findBlock(deepslateOreModName, deepslateOreBlockName);
     }
 }

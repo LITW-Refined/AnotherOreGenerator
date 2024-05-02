@@ -40,32 +40,50 @@ public class WorldGenOresAdditional implements IWorldGenerator {
                             int i1 = x + random.nextInt(8) - random.nextInt(8);
                             int j1 = y + random.nextInt(4) - random.nextInt(4);
                             int k1 = z + random.nextInt(8) - random.nextInt(8);
-                            Block oreBlock = entry.getOreBlock();
 
-                            // spotless:off
-                            if (world.isAirBlock(i1, j1, k1) && (world.getBlock(i1, j1 +1, k1) != oreBlock || world.getBlock(i1, j1 +1, k1) != Blocks.mob_spawner || world.getBlock(i1, j1 +1, k1) != Blocks.end_portal_frame) && world.getBlock(i1, j1 +1, k1).isSideSolid(world, i1, j1 +1, k1, ForgeDirection.getOrientation(0))) {
-                                world.setBlock(i1, j1 + 1, k1, oreBlock, entry.oreBlockMeta, 2); //1
+                            if (world.isAirBlock(i1, j1, k1)) {
+                                if (isValidDestination(world, entry, i1, j1 + 1, k1)) {} // 1
+                                else if (isValidDestination(world, entry, i1, j1 - 1, k1)) {} // 7
+                                else if (isValidDestination(world, entry, i1, j1, k1 + 1)) {} // 8
+                                else if (isValidDestination(world, entry, i1, j1, k1 - 1)) {} // 9
+                                else if (isValidDestination(world, entry, i1 + 1, j1, k1)) {} // 10
+                                else if (isValidDestination(world, entry, i1 - 1, j1, k1)) {} // 11
                             }
-                            else if (world.isAirBlock(i1, j1, k1) && (world.getBlock(i1, j1 -1, k1) != oreBlock || world.getBlock(i1, j1 -1, k1) != Blocks.mob_spawner || world.getBlock(i1, j1 -1, k1) != Blocks.end_portal_frame) && world.getBlock(i1, j1 -1, k1).isSideSolid(world, i1, j1 -1, k1, ForgeDirection.getOrientation(0))) {
-                                world.setBlock(i1, j1 - 1, k1, oreBlock, entry.oreBlockMeta, 2); //7
-                            }
-                            else if (world.isAirBlock(i1, j1, k1) && (world.getBlock(i1, j1 , k1 +1) != oreBlock || world.getBlock(i1, j1 , k1 +1) != Blocks.mob_spawner || world.getBlock(i1, j1 , k1 +1) != Blocks.end_portal_frame) && world.getBlock(i1, j1 , k1 +1).isSideSolid(world, i1, j1 , k1 +1, ForgeDirection.getOrientation(0))) {
-                                world.setBlock(i1, j1, k1 + 1, oreBlock, entry.oreBlockMeta, 2); //8
-                            }
-                            else if (world.isAirBlock(i1, j1, k1) && (world.getBlock(i1, j1 , k1 -1) != oreBlock || world.getBlock(i1, j1 , k1 -1) != Blocks.mob_spawner || world.getBlock(i1, j1 , k1 -1) != Blocks.end_portal_frame) && world.getBlock(i1, j1 , k1 -1).isSideSolid(world, i1, j1 , k1 -1, ForgeDirection.getOrientation(0))) {
-                                world.setBlock(i1, j1, k1 - 1, oreBlock, entry.oreBlockMeta, 2); //9
-                            }
-                            else if (world.isAirBlock(i1, j1, k1) && (world.getBlock(i1 +1, j1 , k1) != oreBlock || world.getBlock(i1 +1, j1 , k1) != Blocks.mob_spawner || world.getBlock(i1 +1, j1 , k1) != Blocks.end_portal_frame) && world.getBlock(i1+1, j1 , k1).isSideSolid(world, i1+1, j1 , k1, ForgeDirection.getOrientation(0))) {
-                                world.setBlock(i1 + 1, j1, k1, oreBlock, entry.oreBlockMeta, 2); //10
-                            }
-                            else if (world.isAirBlock(i1, j1, k1) && (world.getBlock(i1 -1, j1 , k1) != oreBlock || world.getBlock(i1 -1, j1 , k1) != Blocks.mob_spawner || world.getBlock(i1 -1, j1 , k1) != Blocks.end_portal_frame) && world.getBlock(i1-1, j1 , k1).isSideSolid(world, i1-1, j1 , k1, ForgeDirection.getOrientation(0))) {
-                                world.setBlock(i1 - 1, j1, k1, oreBlock, entry.oreBlockMeta, 2); //11
-                            }
-                            // spotless:on
                         }
                     }
                 }
             }
         }
+    }
+
+    private static boolean isValidDestination(World world, OreConfigEntry entry, int i1, int j1, int k1) {
+        Block oreBlock = entry.getOreBlock();
+        Block deepslateOreBlock = entry.getDeepslateOreBlock();
+        Block destBlock = world.getBlock(i1, j1, k1);
+
+        if (destBlock == oreBlock || destBlock == deepslateOreBlock
+            || destBlock == Blocks.mob_spawner
+            || destBlock == Blocks.end_portal_frame) {
+            return false;
+        }
+
+        if (destBlock.isSideSolid(world, i1, j1, k1, ForgeDirection.getOrientation(0))) {
+            return false;
+        }
+
+        if (deepslateOreBlock != null && isDeepslate(destBlock)) {
+            world.setBlock(i1, j1, k1, deepslateOreBlock, entry.deepslateOreBlockMeta, 2);
+        } else if (oreBlock != null) {
+            world.setBlock(i1, j1, k1, oreBlock, entry.oreBlockMeta, 2);
+        } else {
+            return false;
+        }
+
+        return true;
+    }
+
+    private static boolean isDeepslate(Block block) {
+        return block.getUnlocalizedName()
+            .equals("etfuturum.deepslate");
     }
 }
