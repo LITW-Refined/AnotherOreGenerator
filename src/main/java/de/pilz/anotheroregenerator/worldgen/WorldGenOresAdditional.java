@@ -67,7 +67,7 @@ public class WorldGenOresAdditional implements IWorldGenerator {
             return false;
         }
 
-        if (destBlock.isSideSolid(world, i1, j1, k1, ForgeDirection.getOrientation(0))) {
+        if (!destBlock.isSideSolid(world, i1, j1, k1, ForgeDirection.getOrientation(0))) {
             return false;
         }
 
