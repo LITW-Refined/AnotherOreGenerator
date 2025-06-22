@@ -31,7 +31,7 @@ public class WorldGenOresAdditional implements IWorldGenerator {
             int x = chunkX * 16 + random.nextInt(16) + 8;
             int z = chunkZ * 16 + random.nextInt(16) + 8;
 
-            if ((world.getHeightValue(x, z) > 0) && random.nextInt(3) == 1) {
+            if (world.getHeightValue(x, z) > 0 && random.nextInt(3) == 1) {
                 for (OreConfigEntry entry : oreConfig.getOres()) {
                     if (entry.enabled && entry.isAdditional && entry.allowInDimension(world.provider.dimensionId)) {
                         int y = entry.minY + random.nextInt(entry.maxY - entry.minY);
@@ -41,7 +41,7 @@ public class WorldGenOresAdditional implements IWorldGenerator {
                             int j1 = y + random.nextInt(4) - random.nextInt(4);
                             int k1 = z + random.nextInt(8) - random.nextInt(8);
 
-                            if (world.isAirBlock(i1, j1, k1)) {
+                            if (world.blockExists(i1, j1, k1) && world.isAirBlock(i1, j1, k1)) {
                                 if (isValidDestination(world, entry, i1, j1 + 1, k1)) {} // 1
                                 else if (isValidDestination(world, entry, i1, j1 - 1, k1)) {} // 7
                                 else if (isValidDestination(world, entry, i1, j1, k1 + 1)) {} // 8
@@ -57,6 +57,11 @@ public class WorldGenOresAdditional implements IWorldGenerator {
     }
 
     private static boolean isValidDestination(World world, OreConfigEntry entry, int i1, int j1, int k1) {
+        // Avoid cascade worlgen
+        if (!world.blockExists(i1, j1, k1)) {
+            return false;
+        }
+
         Block oreBlock = entry.getOreBlock();
         Block deepslateOreBlock = entry.getDeepslateOreBlock();
         Block destBlock = world.getBlock(i1, j1, k1);
