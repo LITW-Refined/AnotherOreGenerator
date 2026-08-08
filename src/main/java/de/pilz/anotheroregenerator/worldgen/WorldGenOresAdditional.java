@@ -92,17 +92,17 @@ public class WorldGenOresAdditional implements IWorldGenerator {
     }
 
     private static boolean isDeepslate(Block block, int y) {
+        // Check height
+        if (y <= GeneralConfig.deepslateHeight) {
+            return true;
+        }
+
         // Check against block name
         final String blockName = block.getUnlocalizedName();
         for (String deepslateBlock : GeneralConfig.deepslateBlocks) {
             if (blockName.equals(deepslateBlock)) {
                 return true;
             }
-        }
-
-        // Check height
-        if (y <= GeneralConfig.deepslateHeight) {
-            return true;
         }
 
         // Negative
