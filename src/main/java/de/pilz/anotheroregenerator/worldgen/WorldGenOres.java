@@ -7,6 +7,7 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 
 import cpw.mods.fml.common.IWorldGenerator;
+import de.pilz.anotheroregenerator.configuration.GeneralConfig;
 import de.pilz.anotheroregenerator.configuration.oreconfig.OreConfig;
 import de.pilz.anotheroregenerator.configuration.oreconfig.OreConfigEntry;
 
@@ -23,18 +24,39 @@ public class WorldGenOres implements IWorldGenerator {
         IChunkProvider chunkProvider) {
         for (OreConfigEntry entry : oreConfig.getOres()) {
             if (entry.enabled && !entry.isAdditional && entry.allowInDimension(world.provider.dimensionId)) {
+                final int deepslateHeight = GeneralConfig.deepslateHeight;
                 final int veinSize = entry.minVeinSize + random.nextInt(entry.maxVeinSize - entry.minVeinSize);
+
+                // Minable for normal blocks
                 final WorldGenMinable minable = new WorldGenMinable(
                     entry.getOreBlock(),
                     entry.oreBlockMeta,
                     veinSize,
                     entry.getSourceBlock());
 
+                // Minable for deepslate blocks
+                final WorldGenMinable minableDeepslate;
+                if (entry.minY > deepslateHeight) {
+                    minableDeepslate = null;
+                } else {
+                    minableDeepslate = new WorldGenMinable(
+                        entry.getDeepslateOreBlock(),
+                        entry.deepslateOreBlockMeta,
+                        veinSize,
+                        entry.getSourceBlock());
+                }
+
+                // Generate
                 for (int i = 0; i < entry.intensity; ++i) {
                     final int posX = chunkX * 16 + random.nextInt(16);
                     final int posY = entry.minY + random.nextInt(entry.maxY - entry.minY);
                     final int posZ = chunkZ * 16 + random.nextInt(16);
-                    minable.generate(world, random, posX, posY, posZ);
+
+                    if (posY <= deepslateHeight && minableDeepslate != null) {
+                        minableDeepslate.generate(world, random, posX, posY, posZ);
+                    } else {
+                        minable.generate(world, random, posX, posY, posZ);
+                    }
                 }
             }
         }
