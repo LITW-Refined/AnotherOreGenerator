@@ -2,6 +2,7 @@ package de.pilz.anotheroregenerator.worldgen;
 
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.feature.WorldGenMinable;
@@ -36,7 +37,8 @@ public class WorldGenOres implements IWorldGenerator {
 
                 // Minable for deepslate blocks
                 final WorldGenMinable minableDeepslate;
-                if (entry.minY > deepslateHeight) {
+                final Block deepslateOreBlock = entry.getDeepslateOreBlock();
+                if (entry.minY > deepslateHeight || deepslateOreBlock == null) {
                     minableDeepslate = null;
                 } else {
                     minableDeepslate = new WorldGenMinable(
